@@ -3,14 +3,17 @@
 ### Arquitecturas de Software - ARSW
 ## Ejercicio Introducción al paralelismo - Hilos - Caso BlackListSearch
 
-### Dependencias:
-####   Lecturas:
-*  [Threads in Java](http://beginnersbook.com/2013/03/java-threads/)  (Hasta 'Ending Threads')
-*  [Threads vs Processes]( http://cs-fundamentals.com/tech-interview/java/differences-between-thread-and-process-in-java.php)
+---
+
+## 👥 **Equipo**
+- Laura Daniela Rodríguez Sánchez
+- Sergio Andrés Bejarano Rodríguez
+
 
 ### Descripción
   Este ejercicio contiene una introducción a la programación con hilos en Java, además de la aplicación a un caso concreto.
   
+---
 
 **Parte I - Introducción a Hilos en Java**
 
@@ -18,8 +21,28 @@
 2. Complete el método __main__ de la clase CountMainThreads para que:
 	1. Cree 3 hilos de tipo CountThread, asignándole al primero el intervalo [0..99], al segundo [99..199], y al tercero [200..299].
 	2. Inicie los tres hilos con 'start()'.
-	3. Ejecute y revise la salida por pantalla. 
-	4. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.
+	3. Ejecute y revise la salida por pantalla.
+
+<img width="2205" height="633" alt="image" src="https://github.com/user-attachments/assets/f6f87507-966b-479f-b48f-4b418d0c7e49" />
+
+Los números no se están viendo en orden correcto. 
+
+
+   4. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.
+
+Los números ya se están imprimiendo en el orden correcto:
+
+<img width="2192" height="1090" alt="image" src="https://github.com/user-attachments/assets/129a6ee3-64dc-4c49-892e-47c2610b9213" />
+
+Uso de `run()`:
+Cuando se llama al método `run()` de un objeto Thread, el código definido en este método se ejecuta como una llamada normal dentro del hilo actual (generalmente el hilo principal). En este caso, no se crea un nuevo hilo, por lo que las instrucciones se ejecutan de forma secuencial y determinista, sin paralelismo.
+
+Uso de `start()`:
+Al invocar `start()`, la máquina virtual de Java crea un nuevo hilo de ejecución en el sistema operativo. Ese nuevo hilo será el encargado de ejecutar internamente el método `run()`. Este comportamiento permite la ejecución concurrente, lo que significa que varios hilos pueden ejecutarse en paralelo o intercalarse, dependiendo del planificador de la CPU. Debido a esta naturaleza concurrente, la salida del programa puede variar en cada ejecución.
+
+En resumen, mientras que `run()` simplemente ejecuta el método como una función ordinaria en el hilo principal, `start()` habilita el verdadero comportamiento de multihilo en Java, permitiendo que los procesos se ejecuten de forma simultánea y con resultados no deterministas en el orden de salida.
+
+---
 
 **Parte II - Ejercicio Black List Search**
 
@@ -49,6 +72,13 @@ Para 'refactorizar' este código, y hacer que explote la capacidad multi-núcleo
 
 1. Cree una clase de tipo Thread que represente el ciclo de vida de un hilo que haga la búsqueda de un segmento del conjunto de servidores disponibles. Agregue a dicha clase un método que permita 'preguntarle' a las instancias del mismo (los hilos) cuantas ocurrencias de servidores maliciosos ha encontrado o encontró.
 
+## Clase `HostBlackListSearchThread`
+
+La clase **`HostBlackListSearchThread`** extiende de `Thread` y representa el **ciclo de vida de un hilo** encargado de realizar la búsqueda de una dirección IP dentro de un rango específico de servidores reportados como maliciosos.  
+
+Cada instancia de esta clase recibe un **segmento delimitado por índices (`startIndex` – `endIndex`)**, lo que permite que múltiples hilos trabajen **de forma concurrente y eficiente** sobre diferentes porciones del conjunto total de servidores.  
+
+
 2. Agregue al método 'checkHost' un parámetro entero N, correspondiente al número de hilos entre los que se va a realizar la búsqueda (recuerde tener en cuenta si N es par o impar!). Modifique el código de este método para que divida el espacio de búsqueda entre las N partes indicadas, y paralelice la búsqueda a través de N hilos. Haga que dicha función espere hasta que los N hilos terminen de resolver su respectivo sub-problema, agregue las ocurrencias encontradas por cada hilo a la lista que retorna el método, y entonces calcule (sumando el total de ocurrencuas encontradas por cada hilo) si el número de ocurrencias es mayor o igual a _BLACK_LIST_ALARM_COUNT_. Si se da este caso, al final se DEBE reportar el host como confiable o no confiable, y mostrar el listado con los números de las listas negras respectivas. Para lograr este comportamiento de 'espera' revise el método [join](https://docs.oracle.com/javase/tutorial/essential/concurrency/join.html) del API de concurrencia de Java. Tenga también en cuenta:
 
 	* Dentro del método checkHost Se debe mantener el LOG que informa, antes de retornar el resultado, el número de listas negras revisadas VS. el número de listas negras total (línea 60). Se debe garantizar que dicha información sea verídica bajo el nuevo esquema de procesamiento en paralelo planteado.
@@ -56,9 +86,29 @@ Para 'refactorizar' este código, y hacer que explote la capacidad multi-núcleo
 	* Se sabe que el HOST 202.24.34.55 está reportado en listas negras de una forma más dispersa, y que el host 212.24.24.55 NO está en ninguna lista negra.
 
 
+<img width="1930" height="829" alt="image" src="https://github.com/user-attachments/assets/bfe8726b-e87a-411c-b08b-b1d4769648bc" />
+
+---
+
 **Parte II.I Para discutir la próxima clase (NO para implementar aún)**
 
 La estrategia de paralelismo antes implementada es ineficiente en ciertos casos, pues la búsqueda se sigue realizando aún cuando los N hilos (en su conjunto) ya hayan encontrado el número mínimo de ocurrencias requeridas para reportar al servidor como malicioso. Cómo se podría modificar la implementación para minimizar el número de consultas en estos casos?, qué elemento nuevo traería esto al problema?
+
+### Propuesta de Mejora
+
+La mejora consiste en permitir que los hilos finalicen su ejecución de manera anticipada, tan pronto como se alcance el umbral mínimo de ocurrencias. Para lograrlo se introduce:
+
+- Variable compartida de control
+
+Se define una variable global que contabiliza las ocurrencias encontradas por todos los hilos.
+
+Una vez que esta variable alcanza el umbral, los hilos pueden detener su búsqueda.
+
+ - Sincronización por bloques
+
+Para evitar condiciones de carrera, las actualizaciones sobre la variable compartida se realizarían dentro de un bloque synchronized.
+
+Esto garantiza que solo un hilo a la vez pueda modificar el contador global, preservando la consistencia de datos.
 
 ---
 
