@@ -160,6 +160,7 @@ Se implementa en el método main ,de manera general, el siguiente código cambia
 
    **Tiempo de ejecución en mm:ss.mmm:** 00:01.195
 
+*Al iniciar el programa ejecute el monitor jVisualVM, y a medida que corran las pruebas, revise y anote el consumo de CPU y de memoria en cada caso.*
 
 <img width="1600" height="703" alt="image" src="https://github.com/user-attachments/assets/6596aec0-2f6a-4b23-9afd-a2dbe9ec1acc" />
 
