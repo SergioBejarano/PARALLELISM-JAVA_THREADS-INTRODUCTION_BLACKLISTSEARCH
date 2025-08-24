@@ -68,12 +68,12 @@ La estrategia de paralelismo antes implementada es ineficiente en ciertos casos,
 
 Se implementa en el método main ,de manera general, el siguiente código cambiando el número de hilos según se solicite:
 
-{ Imagen bloque de código }
+<img width="958" height="213" alt="image" src="https://github.com/user-attachments/assets/c7981998-8c4a-4dd1-ae1e-f22c497b1e8c" />
 
 1. Un solo hilo.
     Se obtienen los siguientes resultados:
 
-    { Imagen fin de ejecución }
+    <img width="1166" height="199" alt="image" src="https://github.com/user-attachments/assets/c530ea3b-d9f3-420a-b009-e38d4de93828" />
 
     **Tiempo de ejecución en mm:ss.mmm:** 02:09.352
 
@@ -81,7 +81,7 @@ Se implementa en el método main ,de manera general, el siguiente código cambia
 2. Tantos hilos como núcleos de procesamiento (haga que el programa determine esto haciendo uso del [API Runtime](https://docs.oracle.com/javase/7/docs/api/java/lang/Runtime.html)).
    Se obtienen los siguientes resultados:
 
-   { Imagen fin de ejecución }
+   <img width="1167" height="194" alt="image" src="https://github.com/user-attachments/assets/d628b7e3-106c-46ea-9f73-6ff2db1ffd2d" />
 
    **Tiempo de ejecución en mm:ss.mmm:** 00:16.037
 
@@ -89,7 +89,7 @@ Se implementa en el método main ,de manera general, el siguiente código cambia
 3. Tantos hilos como el doble de núcleos de procesamiento.
    Se obtienen los siguientes resultados:
 
-   { Imagen fin de ejecución }
+   <img width="1169" height="206" alt="image" src="https://github.com/user-attachments/assets/6cf42e4e-1109-46f1-a4e8-6fd8ecc6ad2e" />
 
    **Tiempo de ejecución en mm:ss.mmm:** 00:07.951
 
@@ -97,7 +97,7 @@ Se implementa en el método main ,de manera general, el siguiente código cambia
 4. 50 hilos.
    Se obtienen los siguientes resultados:
 
-   { Imagen fin de ejecución }
+   <img width="1172" height="197" alt="image" src="https://github.com/user-attachments/assets/cb028526-66aa-41ee-9498-52263c0a0629" />
 
    **Tiempo de ejecución en mm:ss.mmm:** 00:02.465
 
@@ -106,12 +106,12 @@ Se implementa en el método main ,de manera general, el siguiente código cambia
 5. 100 hilos.
    Se obtienen los siguientes resultados:
 
-   { Imagen fin de ejecución }
+   <img width="1171" height="203" alt="image" src="https://github.com/user-attachments/assets/0e56c038-d6f3-4209-a6b3-53cd46a4031d" />
 
    **Tiempo de ejecución en mm:ss.mmm:** 00:01.195
 
 
-{ Imagen en visual}
+<img width="1600" height="703" alt="image" src="https://github.com/user-attachments/assets/6596aec0-2f6a-4b23-9afd-a2dbe9ec1acc" />
 
 En general el uso del CPU estuvo entre 0,1% y 2,3%, siendo los valores menores en los últimos experimentos. Usó de memoria aproximadamente 32 MB ya que pasó de 5 MB a 37 MB.
 
@@ -119,6 +119,7 @@ En general el uso del CPU estuvo entre 0,1% y 2,3%, siendo los valores menores e
 *Con lo anterior, y con los tiempos de ejecución dados, haga una gráfica de tiempo de solución vs. número de hilos. Analice y plantee hipótesis con su compañero para las siguientes preguntas (puede tener en cuenta lo reportado por jVisualVM):*
 
 
+<img width="600" height="353" alt="image" src="https://github.com/user-attachments/assets/79a91e30-9108-43eb-a62d-4b41e683b6e6" />
 
 
 ---
