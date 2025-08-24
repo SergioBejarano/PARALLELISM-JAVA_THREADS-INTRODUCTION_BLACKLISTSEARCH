@@ -28,7 +28,7 @@
 Los números no se están viendo en orden correcto. 
 
 
-   4. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.
+iv. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.
 
 Los números ya se están imprimiendo en el orden correcto:
 
@@ -88,6 +88,18 @@ Cada instancia de esta clase recibe un **segmento delimitado por índices (`star
 
 <img width="1930" height="829" alt="image" src="https://github.com/user-attachments/assets/bfe8726b-e87a-411c-b08b-b1d4769648bc" />
 
+En los resultados mostrados se identifica que en cada caso se revisaron las 80.000 listas ya que la estrategia implementada obliga hacerlo.
+
+Cuando se lanzan varios hilos para revisar segmentos de servidores, el main o coordinador debe usar `join()` para:
+
+- Esperar a que todos los hilos terminen su búsqueda en su rango.
+
+- Recoger resultados parciales de cada hilo (ej: cuántas listas negras encontró).
+
+- Combinar la información y dar la salida final (ej: "Checked 80,000 of 80,000").
+
+- Sin `join()`, el main podría terminar antes de que los hilos acaben su trabajo, y nos daría resultados incompletos o inconsistentes.
+
 ---
 
 **Parte II.I Para discutir la próxima clase (NO para implementar aún)**
@@ -100,9 +112,9 @@ La mejora consiste en permitir que los hilos finalicen su ejecución de manera a
 
 - Variable compartida de control
 
-Se define una variable global que contabiliza las ocurrencias encontradas por todos los hilos.
+Se definiría una variable global que contabiliza las ocurrencias encontradas por todos los hilos.
 
-Una vez que esta variable alcanza el umbral, los hilos pueden detener su búsqueda.
+Una vez que esta variable alcance el umbral, los hilos pueden detener su búsqueda.
 
  - Sincronización por bloques
 
@@ -182,7 +194,7 @@ En general el uso del CPU estuvo entre 0,1% y 2,3%, siendo los valores menores e
     donde _S(n)_ es el mejoramiento teórico del desempeño, _P_ la fracción paralelizable del algoritmo, y _n_ el número de hilos, a mayor _n_, mayor debería ser dicha mejora. ¿Por qué el mejor desempeño no se logra con los 500 hilos?, ¿Cómo se compara este desempeño cuando se usan 200?.*
 
 El mejor desempeño no se logra con 500 hilos ya que de acuerdo con la ley de Amdahl el mejoramiento teórico del desempeño depende de la fracción paralelizable del algoritmo y
-tal como se ve en la gráfica de comparación entre el número de hilos y el tiempo de ejecución, al ir aumentando el número de hilos este tiende hacia un mismo valo, además en la práctica
+tal como se ve en la gráfica de comparación entre el número de hilos y el tiempo de ejecución, al ir aumentando el número de hilos este tiende hacia un mismo valor, además en la práctica
 hay costos extra como la creación y el cambio de contexto entre hilos, la competencia por memoria y recursos compartidos. Es por esto que a mayor número de hilos la ganancia
 adicional será cada vez menor, y por ende habrá mas ganancia con 200 hilos que con 500.
 
